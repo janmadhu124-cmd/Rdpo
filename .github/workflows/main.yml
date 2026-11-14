@@ -1,0 +1,13 @@
+# 1. RDP ON karo
+Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0 -Force
+
+# 2. Firewall me RDP allow karo
+Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+
+# 3. RDP ke liye alag user banao (apna password khud rakho)
+$Password = Read-Host "Apna strong password likho" -AsSecureString
+New-LocalUser -Name "MyRDP" -Password $Password -FullName "My RDP User" -Description "RDP User"
+Add-LocalGroupMember -Group "Remote Desktop Users" -Member "MyRDP"
+Add-LocalGroupMember -Group "Administrators" -Member "MyRDP"
+
+Write-Host "Ho gaya! User: MyRDP"
